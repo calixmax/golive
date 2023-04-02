@@ -1,0 +1,66 @@
+// JavaScript code for the video player
+var player;
+var isPlaying = false;
+
+function onYouTubeIframeAPIReady() {
+  // Set up the player with default video ID
+  player = new YT.Player('player', {
+    height: '360',
+    width: '640',
+    videoId: 'EZdwMqnNHE8',
+    playerVars: {
+      autoplay: 1,
+      controls: 1,
+      showinfo: 0,
+      modestbranding: 1,
+      rel: 0,
+      iv_load_policy: 3,
+      cc_load_policy: 0,
+      disablekb: 1,
+      fs: 0
+    },
+    events: {
+      'onReady': onPlayerReady,
+      'onStateChange': onPlayerStateChange
+    }
+  });
+}
+
+function onPlayerReady(event) {
+  // Event listener when the player is ready
+  event.target.playVideo();
+}
+
+function onPlayerStateChange(event) {
+  // Event listener when the player changes state
+  if (event.data == YT.PlayerState.PLAYING) {
+    document.getElementById('player').classList.add('playing');
+    isPlaying = true;
+  } else {
+    document.getElementById('player').classList.remove('playing');
+    isPlaying = false;
+  }
+}
+
+function togglePlayPause() {
+  // Toggle play/pause functionality
+  if (isPlaying) {
+    player.pauseVideo();
+    isPlaying = false;
+  } else {
+    player.playVideo();
+    isPlaying = true;
+  }
+}
+
+function changeVideo() {
+  // Get the new video ID from the input field
+  var newVideoId = document.getElementById('video-id').value;
+  
+  // Update the video ID in the player
+  player.cueVideoById(newVideoId);
+  
+  // Reset the play/pause button to paused state
+  isPlaying = false;
+  document.getElementById('player').classList.remove('playing');
+}
